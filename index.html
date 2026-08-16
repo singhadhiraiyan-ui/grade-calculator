@@ -21,7 +21,22 @@
 
     <p id="result"></p>
 
-    <script src="script.js"></script>
+<h2>Welche Note brauche ich?</h2>
+
+<p>Mein aktueller Durchschnitt:</p>
+<input type="number" id="currentAverage" step="0.01" min="1" max="6">
+
+<p>Mein gewünschter Durchschnitt:</p>
+<input type="number" id="targetAverage" step="0.01" min="1" max="6">
+
+<p>Anzahl meiner bisherigen Noten:</p>
+<input type="number" id="numberOfGrades" min="1">
+
+<button id="neededGradeButton">Benötigte Note berechnen</button>
+
+<p id="neededGradeResult"></p>
+
+<script src="script.js"></script>
 
 </body>
 </html>
