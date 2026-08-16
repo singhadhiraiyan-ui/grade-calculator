@@ -1,1 +1,1 @@
-alert("Hello from GradePilot!");
+const gradeInput = document.getElementById("grade");
