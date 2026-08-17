@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,85 +11,56 @@
 
 <body>
 
-    <h1>GradePilot</h1>
+    <h1>Willkommen bei GradePilot!</h1>
 
-    <p>Deine Noten. Dein Überblick. Dein Ziel.</p>
+    <!-- Notendurchschnitt -->
+    <section>
+        <h2>📚 Notendurchschnitt</h2>
 
-    <h2>Meine Fächer</h2>
+        <p>Gib deine Noten ein:</p>
 
-    <div id="subjects">
-
-        <!-- Mathematik -->
-        <div class="subject">
-            <h3>Mathematik</h3>
-
-            <div class="grades">
-                <input type="number" class="grade" min="1" max="6" step="1">
-            </div>
-
-            <button class="addGradeButton">Weitere Note</button>
-
-            <p class="subjectAverage">
-                Durchschnitt: —
-            </p>
+        <div id="grades">
+            <input type="number" class="grade" min="1" max="6">
         </div>
 
+        <br>
 
-        <!-- Deutsch -->
-        <div class="subject">
-            <h3>Deutsch</h3>
+        <button id="addGradeButton">
+            Weitere Note hinzufügen
+        </button>
 
-            <div class="grades">
-                <input type="number" class="grade" min="1" max="6" step="1">
-            </div>
+        <button id="calculateButton">
+            Durchschnitt berechnen
+        </button>
 
-            <button class="addGradeButton">Weitere Note</button>
-
-            <p class="subjectAverage">
-                Durchschnitt: —
-            </p>
-        </div>
+        <p id="result"></p>
+    </section>
 
 
-        <!-- Englisch -->
-        <div class="subject">
-            <h3>Englisch</h3>
+    <!-- Benötigte Note -->
+    <section>
+        <h2>🎯 Welche Note brauche ich?</h2>
 
-            <div class="grades">
-                <input type="number" class="grade" min="1" max="6" step="1">
-            </div>
+        <p>Dein aktueller Notendurchschnitt:</p>
+        <input type="number" id="currentAverage" step="0.01" min="1" max="6">
 
-            <button class="addGradeButton">Weitere Note</button>
+        <p>Anzahl deiner bisherigen Noten:</p>
+        <input type="number" id="numberOfGrades" min="1">
 
-            <p class="subjectAverage">
-                Durchschnitt: —
-            </p>
-        </div>
+        <p>Dein gewünschter Notendurchschnitt:</p>
+        <input type="number" id="targetAverage" step="0.01" min="1" max="6">
 
-    </div>
+        <br><br>
 
+        <button id="calculateNeededGrade">
+            Benötigte Note berechnen
+        </button>
 
-    <button id="addSubjectButton">
-        + Neues Fach hinzufügen
-    </button>
-
-
-    <hr>
-
-
-    <h2>Gesamtdurchschnitt</h2>
-
-    <button id="calculateOverallButton">
-        Gesamtdurchschnitt berechnen
-    </button>
-
-    <p id="overallResult">
-        Gesamtdurchschnitt: —
-    </p>
+        <p id="neededGradeResult"></p>
+    </section>
 
 
     <script src="script.js"></script>
 
 </body>
-
 </html>
