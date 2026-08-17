@@ -11,6 +11,7 @@ addGradeButton.addEventListener("click", function() {
     newInput.className = "grade";
     newInput.min = "1";
     newInput.max = "6";
+    newInput.step = "1";
 
     gradesContainer.appendChild(newInput);
 });
@@ -21,11 +22,19 @@ calculateButton.addEventListener("click", function() {
 
     let grades = [];
 
-    gradeInputs.forEach(function(input) {
+    for (let input of gradeInputs) {
         if (input.value !== "") {
-            grades.push(Number(input.value));
+            const grade = Number(input.value);
+
+            // Prüfen, ob die Note zwischen 1 und 6 liegt
+            if (grade < 1 || grade > 6) {
+                result.textContent = "Bitte gib nur Noten von 1 bis 6 ein.";
+                return;
+            }
+
+            grades.push(grade);
         }
-    });
+    }
 
     if (grades.length === 0) {
         result.textContent = "Bitte gib mindestens eine Note ein.";
