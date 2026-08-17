@@ -1,42 +1,110 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>GradePilot</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+const gradesContainer = document.getElementById("grades");
+const addGradeButton = document.getElementById("addGradeButton");
+const calculateButton = document.getElementById("calculateButton");
+const result = document.getElementById("result");
 
-<body>
+// Weitere Note hinzufügen
+addGradeButton.addEventListener("click", function() {
+    const newInput = document.createElement("input");
 
-    <h1>Willkommen bei GradePilot!</h1>
+    newInput.type = "number";
+    newInput.className = "grade";
+    newInput.min = "1";
+    newInput.max = "6";
+    newInput.step = "1";
 
-    <p>Gib deine Note ein:</p>
+    gradesContainer.appendChild(newInput);
+});
 
-    <div id="grades">
-        <input type="number" class="grade" min="1" max="6">
-    </div>
 
-    <button id="addGradeButton">Weitere Note hinzufügen</button>
+// Durchschnitt berechnen
+calculateButton.addEventListener("click", function() {
+    const gradeInputs = document.querySelectorAll(".grade");
 
-    <button id="calculateButton">Durchschnitt berechnen</button>
+    let grades = [];
 
-    <p id="result"></p>
+    for (let input of gradeInputs) {
+        if (input.value !== "") {
+            const grade = Number(input.value);
 
-<h2>Welche Note brauche ich?</h2>
+            // Prüfen, ob die Note zwischen 1 und 6 liegt
+            if (grade < 1 || grade > 6) {
+                result.textContent = "Bitte gib nur Noten von 1 bis 6 ein.";
+                return;
+            }
 
-<p>Mein aktueller Durchschnitt:</p>
-<input type="number" id="currentAverage" step="0.01" min="1" max="6">
+            grades.push(grade);
+        }
+    }
 
-<p>Mein gewünschter Durchschnitt:</p>
-<input type="number" id="targetAverage" step="0.01" min="1" max="6">
+    if (grades.length === 0) {
+        result.textContent = "Bitte gib mindestens eine Note ein.";
+        return;
+    }
 
-<p>Anzahl meiner bisherigen Noten:</p>
-<input type="number" id="numberOfGrades" min="1">
+    const average =
+        grades.reduce(function(sum, grade) {
+            return sum + grade;
+        }, 0) / grades.length;
 
-<button id="neededGradeButton">Benötigte Note berechnen</button>
+    result.textContent =
+        "Dein Notendurchschnitt ist: " + average.toFixed(2);
+});
 
-<p id="neededGradeResult"></p>
 
-<script src="script.js"></script>
+// Welche Note brauche ich?
+const calculateNeededGradeButton =
+    document.getElementById("calculateNeededGradeButton");
 
-</body>
-</html>
+const neededGradeResult =
+    document.getElementById("neededGradeResult");
+
+calculateNeededGradeButton.addEventListener("click", function() {
+
+    const currentAverage =
+        Number(document.getElementById("currentAverage").value);
+
+    const numberOfGrades =
+        Number(document.getElementById("numberOfGrades").value);
+
+    const targetAverage =
+        Number(document.getElementById("targetAverage").value);
+
+
+    // Eingaben überprüfen
+    if (
+        currentAverage === 0 ||
+        numberOfGrades === 0 ||
+        targetAverage === 0
+    ) {
+        neededGradeResult.textContent =
+            "Bitte fülle alle Felder aus.";
+        return;
+    }
+
+
+    // Durchschnitt nach der nächsten Note berechnen
+    const neededGrade =
+        targetAverage * (numberOfGrades + 1)
+        - currentAverage * numberOfGrades;
+
+
+    // Prüfen, ob die benötigte Note überhaupt möglich ist
+    if (neededGrade < 1) {
+        neededGradeResult.textContent =
+            "Du brauchst höchstens eine 1 – dein Ziel ist bereits erreichbar.";
+        return;
+    }
+
+    if (neededGrade > 6) {
+        neededGradeResult.textContent =
+            "Leider ist dein Ziel mit nur einer weiteren Note nicht erreichbar.";
+        return;
+    }
+
+
+    neededGradeResult.textContent =
+        "Du brauchst ungefähr eine " +
+        neededGrade.toFixed(2) +
+        ".";
+});
