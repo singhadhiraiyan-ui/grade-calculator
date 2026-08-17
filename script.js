@@ -1,36 +1,30 @@
-// ===============================
-// GradePilot - Subject System
-// ===============================
+const gradesContainer = document.getElementById("grades");
+const addGradeButton = document.getElementById("addGradeButton");
+const calculateButton = document.getElementById("calculateButton");
+const result = document.getElementById("result");
 
 
-// ➕ Weitere Note zu einem Fach hinzufügen
-const addGradeButtons = document.querySelectorAll(".addGradeButton");
+// ==========================================
+// 📚 NOTENDURCHSCHNITT
+// ==========================================
 
-addGradeButtons.forEach(function(button) {
+addGradeButton.addEventListener("click", function () {
 
-    button.addEventListener("click", function() {
+    const newInput = document.createElement("input");
 
-        const subject = button.closest(".subject");
-        const gradesContainer = subject.querySelector(".grades");
+    newInput.type = "number";
+    newInput.className = "grade";
+    newInput.min = "1";
+    newInput.max = "6";
+    newInput.step = "0.1";
 
-        const newInput = document.createElement("input");
-
-        newInput.type = "number";
-        newInput.className = "grade";
-        newInput.min = "1";
-        newInput.max = "6";
-        newInput.step = "1";
-
-        gradesContainer.appendChild(newInput);
-    });
-
+    gradesContainer.appendChild(newInput);
 });
 
 
-// 📊 Durchschnitt eines einzelnen Faches berechnen
-function calculateSubjectAverage(subject) {
+calculateButton.addEventListener("click", function () {
 
-    const gradeInputs = subject.querySelectorAll(".grade");
+    const gradeInputs = document.querySelectorAll(".grade");
 
     let grades = [];
 
@@ -40,205 +34,125 @@ function calculateSubjectAverage(subject) {
 
             const grade = Number(input.value);
 
-            if (grade < 1 || grade > 6) {
-                return;
+            if (grade >= 1 && grade <= 6) {
+                grades.push(grade);
             }
-
-            grades.push(grade);
         }
-
     });
 
 
     if (grades.length === 0) {
-        return null;
-    }
 
-
-    const sum = grades.reduce(function(total, grade) {
-        return total + grade;
-    }, 0);
-
-
-    return sum / grades.length;
-}
-
-
-// 🔄 Durchschnitt jedes Faches aktualisieren
-function updateSubjectAverages() {
-
-    const subjects = document.querySelectorAll(".subject");
-
-    subjects.forEach(function(subject) {
-
-        const averageElement =
-            subject.querySelector(".subjectAverage");
-
-        const average = calculateSubjectAverage(subject);
-
-
-        if (average === null) {
-
-            averageElement.textContent =
-                "Durchschnitt: —";
-
-        } else {
-
-            averageElement.textContent =
-                "Durchschnitt: " + average.toFixed(2);
-        }
-
-    });
-
-}
-
-
-// 📊 Gesamtdurchschnitt berechnen
-const calculateOverallButton =
-    document.getElementById("calculateOverallButton");
-
-const overallResult =
-    document.getElementById("overallResult");
-
-
-calculateOverallButton.addEventListener("click", function() {
-
-    const subjects = document.querySelectorAll(".subject");
-
-    let allGrades = [];
-
-
-    subjects.forEach(function(subject) {
-
-        const gradeInputs =
-            subject.querySelectorAll(".grade");
-
-
-        gradeInputs.forEach(function(input) {
-
-            if (input.value !== "") {
-
-                const grade = Number(input.value);
-
-
-                if (grade < 1 || grade > 6) {
-
-                    overallResult.textContent =
-                        "Bitte gib nur Noten von 1 bis 6 ein.";
-
-                    return;
-                }
-
-
-                allGrades.push(grade);
-            }
-
-        });
-
-    });
-
-
-    if (allGrades.length === 0) {
-
-        overallResult.textContent =
-            "Bitte gib mindestens eine Note ein.";
-
+        result.textContent = "Bitte gib mindestens eine Note von 1 bis 6 ein.";
         return;
     }
 
 
-    const total =
-        allGrades.reduce(function(sum, grade) {
+    const average =
+        grades.reduce(function(sum, grade) {
             return sum + grade;
-        }, 0);
+        }, 0) / grades.length;
 
 
-    const overallAverage =
-        total / allGrades.length;
-
-
-    overallResult.textContent =
-        "Gesamtdurchschnitt: " +
-        overallAverage.toFixed(2);
-
+    result.textContent =
+        "Dein Notendurchschnitt ist: " + average.toFixed(2);
 });
 
 
-// ➕ Neues Fach hinzufügen
-const addSubjectButton =
-    document.getElementById("addSubjectButton");
+// ==========================================
+// 🎯 WELCHE NOTE BRAUCHE ICH?
+// ==========================================
+
+const calculateNeededGrade =
+    document.getElementById("calculateNeededGrade");
+
+const neededGradeResult =
+    document.getElementById("neededGradeResult");
 
 
-const subjectsContainer =
-    document.getElementById("subjects");
+calculateNeededGrade.addEventListener("click", function () {
+
+    const currentAverage =
+        Number(document.getElementById("currentAverage").value);
+
+    const numberOfGrades =
+        Number(document.getElementById("numberOfGrades").value);
+
+    const targetAverage =
+        Number(document.getElementById("targetAverage").value);
 
 
-addSubjectButton.addEventListener("click", function() {
+    // Eingaben überprüfen
+    if (
+        currentAverage === 0 ||
+        numberOfGrades === 0 ||
+        targetAverage === 0
+    ) {
 
-    const subjectName =
-        prompt("Wie heißt das neue Fach?");
+        neededGradeResult.textContent =
+            "Bitte fülle alle Felder aus.";
 
-
-    if (subjectName === null || subjectName.trim() === "") {
         return;
     }
 
 
-    const subject = document.createElement("div");
+    // Prüfen, ob die Noten zwischen 1 und 6 liegen
+    if (
+        currentAverage < 1 ||
+        currentAverage > 6 ||
+        targetAverage < 1 ||
+        targetAverage > 6
+    ) {
 
-    subject.className = "subject";
+        neededGradeResult.textContent =
+            "Noten müssen zwischen 1 und 6 liegen.";
 
-
-    subject.innerHTML = `
-        <h3>${subjectName}</h3>
-
-        <div class="grades">
-            <input
-                type="number"
-                class="grade"
-                min="1"
-                max="6"
-                step="1"
-            >
-        </div>
-
-        <button class="addGradeButton">
-            Weitere Note
-        </button>
-
-        <p class="subjectAverage">
-            Durchschnitt: —
-        </p>
-    `;
+        return;
+    }
 
 
-    subjectsContainer.appendChild(subject);
+    // Berechnung:
+    // (aktueller Durchschnitt × Anzahl Noten + neue Note)
+    // ÷ (Anzahl Noten + 1) = Ziel-Durchschnitt
+
+    const neededGrade =
+        targetAverage * (numberOfGrades + 1)
+        - currentAverage * numberOfGrades;
 
 
-    // Button des neuen Faches aktivieren
-    const newAddGradeButton =
-        subject.querySelector(".addGradeButton");
+    // Ist das Ziel bereits erreicht?
+    if (currentAverage <= targetAverage) {
+
+        neededGradeResult.textContent =
+            "🎉 Dein Ziel ist bereits erreicht!";
+
+        return;
+    }
 
 
-    newAddGradeButton.addEventListener("click", function() {
+    // Ist die benötigte Note besser als 1?
+    if (neededGrade < 1) {
 
-        const gradesContainer =
-            subject.querySelector(".grades");
+        neededGradeResult.textContent =
+            "❌ Dieses Ziel ist mit nur einer weiteren Note nicht erreichbar.";
 
-
-        const newInput =
-            document.createElement("input");
-
-
-        newInput.type = "number";
-        newInput.className = "grade";
-        newInput.min = "1";
-        newInput.max = "6";
-        newInput.step = "1";
+        return;
+    }
 
 
-        gradesContainer.appendChild(newInput);
+    // Ist die benötigte Note schlechter als 6?
+    if (neededGrade > 6) {
 
-    });
+        neededGradeResult.textContent =
+            "❌ Dieses Ziel ist mit nur einer weiteren Note nicht erreichbar.";
 
+        return;
+    }
+
+
+    // Ergebnis anzeigen
+    neededGradeResult.textContent =
+        "🎯 Du brauchst ungefähr eine " +
+        neededGrade.toFixed(2) +
+        " in der nächsten Note.";
 });
