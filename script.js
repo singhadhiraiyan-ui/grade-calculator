@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const addSubjectButton =
         document.getElementById("addSubjectButton");
 
+    const overallAverage =
+        document.getElementById("overallAverage");
+
 
     // ==========================================
     // 📊 FACH-DURCHSCHNITT
@@ -68,7 +71,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ==========================================
-    // 🧠 NOTE INPUT AKTUALISIEREN
+    // 📊 GESAMTDURCHSCHNITT
+    // ==========================================
+
+    function updateOverallAverage() {
+
+        const allGradeInputs =
+            document.querySelectorAll(".grade");
+
+        let allGrades = [];
+
+
+        allGradeInputs.forEach(function (input) {
+
+            if (input.value !== "") {
+
+                const grade = Number(input.value);
+
+                if (grade >= 1 && grade <= 6) {
+                    allGrades.push(grade);
+                }
+            }
+        });
+
+
+        // Noch keine Noten vorhanden
+        if (allGrades.length === 0) {
+
+            overallAverage.textContent =
+                "Gesamtdurchschnitt: —";
+
+            return;
+        }
+
+
+        const total =
+            allGrades.reduce(
+                function (sum, grade) {
+                    return sum + grade;
+                },
+                0
+            );
+
+
+        const average =
+            total / allGrades.length;
+
+
+        overallAverage.textContent =
+            "Gesamtdurchschnitt: " +
+            average.toFixed(2);
+    }
+
+
+    // ==========================================
+    // 🧠 NOTENFELD VERBINDEN
     // ==========================================
 
     function connectGradeInput(input, subject) {
@@ -77,18 +134,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const grade = Number(input.value);
 
+
+            // Noten überprüfen
             if (
                 input.value !== "" &&
                 (grade < 1 || grade > 6)
             ) {
+
                 input.setCustomValidity(
                     "Bitte gib eine Note zwischen 1 und 6 ein."
                 );
+
             } else {
+
                 input.setCustomValidity("");
             }
 
+
+            // Fach-Durchschnitt aktualisieren
             updateSubjectAverage(subject);
+
+
+            // Gesamtdurchschnitt aktualisieren
+            updateOverallAverage();
         });
     }
 
@@ -198,11 +266,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     updateSubjectAverage(
                         subject
                     );
+
+                    updateOverallAverage();
                 }
             );
 
 
             updateSubjectAverage(subject);
+            updateOverallAverage();
         }
     );
 
