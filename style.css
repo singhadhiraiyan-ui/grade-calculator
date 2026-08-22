@@ -52,22 +52,41 @@ section p {
 }
 
 /* ==========================================
-   SUBJECT CARDS
+   SUBJECT CARDS 2.0
    ========================================== */
 
 .subject {
-    background: #f8fafc;
+    position: relative;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 20px;
-    margin: 15px 0;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 18px 0;
+    box-shadow: 0 4px 12px rgba(30, 50, 80, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.subject:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 50, 80, 0.09);
 }
 
 .subject h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 20px;
+    margin: 0 0 18px;
+    font-size: 21px;
     color: #2563eb;
+}
+
+/* ==========================================
+   GRADE AREA
+   ========================================== */
+
+.subject .grades {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
 }
 
 /* ==========================================
@@ -75,11 +94,10 @@ section p {
    ========================================== */
 
 input {
-    width: 90px;
+    width: 75px;
     padding: 10px 12px;
-    margin: 5px;
     border: 1px solid #cbd5e1;
-    border-radius: 8px;
+    border-radius: 9px;
     font-size: 16px;
     background: white;
     transition: 0.2s;
@@ -118,13 +136,29 @@ button:active {
 }
 
 /* ==========================================
-   SUBJECT AVERAGES
+   SUBJECT BUTTON
+   ========================================== */
+
+.subject button {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+.subject button:hover {
+    background: #dbeafe;
+}
+
+/* ==========================================
+   SUBJECT AVERAGE
    ========================================== */
 
 .subject .average {
-    margin-top: 12px;
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     color: #475569;
 }
 
@@ -181,11 +215,10 @@ button:active {
     }
 
     input {
-        width: 75px;
+        width: 70px;
     }
 
     button {
-        width: auto;
         margin-top: 8px;
     }
 }
