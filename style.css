@@ -1,19 +1,191 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #1f2937;
-    text-align: center;
-    margin: 0;
-    padding: 60px 20px;
+/* ==========================================
+   GRADEPILOT – MODERN DESIGN
+   ========================================== */
+
+* {
+    box-sizing: border-box;
 }
+
+body {
+    margin: 0;
+    padding: 40px 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+/* ==========================================
+   HEADER
+   ========================================== */
 
 h1 {
-    font-size: 48px;
+    text-align: center;
+    font-size: 42px;
+    margin: 10px 0 45px;
     color: #2563eb;
-    margin-bottom: 10px;
+    font-weight: 800;
 }
 
-p {
-    font-size: 20px;
+h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #172033;
+}
+
+/* ==========================================
+   SECTIONS
+   ========================================== */
+
+section {
+    width: min(850px, 100%);
+    margin: 0 auto 30px;
+    padding: 30px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(30, 50, 80, 0.08);
+    border: 1px solid #e5eaf2;
+}
+
+section p {
     color: #64748b;
+    font-size: 16px;
+}
+
+/* ==========================================
+   SUBJECT CARDS
+   ========================================== */
+
+.subject {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+.subject h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #2563eb;
+}
+
+/* ==========================================
+   GRADE INPUTS
+   ========================================== */
+
+input {
+    width: 90px;
+    padding: 10px 12px;
+    margin: 5px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    transition: 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 10px 16px;
+    margin: 5px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   SUBJECT AVERAGES
+   ========================================== */
+
+.subject .average {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* ==========================================
+   OVERALL AVERAGE
+   ========================================== */
+
+#overallAverage {
+    margin-top: 25px;
+    padding: 20px;
+    text-align: center;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+    color: #1d4ed8;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* ==========================================
+   "WELCHE NOTE BRAUCHE ICH?"
+   ========================================== */
+
+#neededGradeResult {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+/* ==========================================
+   MOBILE DESIGN
+   ========================================== */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px 12px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 30px;
+    }
+
+    section {
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    h2 {
+        font-size: 21px;
+    }
+
+    input {
+        width: 75px;
+    }
+
+    button {
+        width: auto;
+        margin-top: 8px;
+    }
 }
