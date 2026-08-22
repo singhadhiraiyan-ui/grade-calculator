@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,42 +14,75 @@
 
     <h1>Willkommen bei GradePilot!</h1>
 
-    <!-- Notendurchschnitt -->
+
+    <!-- ========================================== -->
+    <!-- 📚 FÄCHER UND NOTEN -->
+    <!-- ========================================== -->
+
     <section>
-        <h2>📚 Notendurchschnitt</h2>
 
-        <p>Gib deine Noten ein:</p>
+        <h2>📚 Meine Fächer</h2>
 
-        <div id="grades">
-            <input type="number" class="grade" min="1" max="6">
-        </div>
+        <p>
+            Füge deine Fächer hinzu und trage deine Noten ein.
+        </p>
+
+        <div id="subjects"></div>
 
         <br>
 
-        <button id="addGradeButton">
-            Weitere Note hinzufügen
+        <button id="addSubjectButton">
+            ➕ Fach hinzufügen
         </button>
 
-        <button id="calculateButton">
-            Durchschnitt berechnen
-        </button>
+        <p id="overallAverage"></p>
 
-        <p id="result"></p>
     </section>
 
 
-    <!-- Benötigte Note -->
+    <!-- ========================================== -->
+    <!-- 🎯 WELCHE NOTE BRAUCHE ICH? -->
+    <!-- ========================================== -->
+
     <section>
+
         <h2>🎯 Welche Note brauche ich?</h2>
 
-        <p>Dein aktueller Notendurchschnitt:</p>
-        <input type="number" id="currentAverage" step="0.01" min="1" max="6">
+        <p>
+            Dein aktueller Notendurchschnitt:
+        </p>
 
-        <p>Anzahl deiner bisherigen Noten:</p>
-        <input type="number" id="numberOfGrades" min="1">
+        <input
+            type="number"
+            id="currentAverage"
+            step="0.01"
+            min="1"
+            max="6"
+        >
 
-        <p>Dein gewünschter Notendurchschnitt:</p>
-        <input type="number" id="targetAverage" step="0.01" min="1" max="6">
+
+        <p>
+            Anzahl deiner bisherigen Noten:
+        </p>
+
+        <input
+            type="number"
+            id="numberOfGrades"
+            min="1"
+        >
+
+
+        <p>
+            Dein gewünschter Notendurchschnitt:
+        </p>
+
+        <input
+            type="number"
+            id="targetAverage"
+            step="0.01"
+            min="1"
+            max="6"
+        >
 
         <br><br>
 
@@ -57,10 +91,16 @@
         </button>
 
         <p id="neededGradeResult"></p>
+
     </section>
 
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================================== -->
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
