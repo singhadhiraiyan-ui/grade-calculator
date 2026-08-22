@@ -278,3 +278,54 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 });
+// ==========================================
+// 📊 GESAMTDURCHSCHNITT
+// ==========================================
+
+function updateOverallAverage() {
+
+    const subjects = document.querySelectorAll(".subject");
+
+    let totalGrades = 0;
+    let totalSum = 0;
+
+    subjects.forEach(function(subject) {
+
+        const gradeInputs = subject.querySelectorAll(".grade");
+
+        gradeInputs.forEach(function(input) {
+
+            if (input.value !== "") {
+
+                const grade = Number(input.value);
+
+                if (grade >= 1 && grade <= 6) {
+                    totalSum += grade;
+                    totalGrades++;
+                }
+            }
+        });
+    });
+
+    const overallResult = document.getElementById("overallAverage");
+
+    if (totalGrades === 0) {
+        overallResult.textContent = "Gesamtdurchschnitt: —";
+        return;
+    }
+
+    const overallAverage = totalSum / totalGrades;
+
+    overallResult.textContent =
+        "Gesamtdurchschnitt: " + overallAverage.toFixed(2);
+}
+
+
+// Gesamtdurchschnitt automatisch aktualisieren
+document.addEventListener("input", function() {
+    updateOverallAverage();
+});
+
+
+// Beim Laden der Seite einmal berechnen
+updateOverallAverage();
