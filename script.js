@@ -205,7 +205,154 @@ document.addEventListener("DOMContentLoaded", function () {
             average.toFixed(2);
     }
 
+// ==========================================
+// 📊 DASHBOARD STATISTIKEN
+// ==========================================
 
+function updateStatistics() {
+
+    const subjects =
+        document.querySelectorAll(".subject");
+
+    const subjectCount =
+        document.getElementById("subjectCount");
+
+    const gradeCount =
+        document.getElementById("gradeCount");
+
+    const bestSubject =
+        document.getElementById("bestSubject");
+
+    const worstSubject =
+        document.getElementById("worstSubject");
+
+
+    // Anzahl der Fächer
+    subjectCount.textContent =
+        subjects.length;
+
+
+    // Alle Fächer untersuchen
+    let totalGrades = 0;
+    let best = null;
+    let worst = null;
+
+
+    subjects.forEach(function (subject) {
+
+        const grades =
+            subject.querySelectorAll(".grade");
+
+        let subjectGrades = [];
+
+
+        grades.forEach(function (input) {
+
+            if (input.value !== "") {
+
+                const grade =
+                    Number(input.value);
+
+                if (
+                    grade >= 1 &&
+                    grade <= 6
+                ) {
+
+                    subjectGrades.push(grade);
+                    totalGrades++;
+                }
+            }
+        });
+
+
+        // Fach ohne Noten überspringen
+        if (subjectGrades.length === 0) {
+            return;
+        }
+
+
+        // Durchschnitt des Faches
+        const sum =
+            subjectGrades.reduce(
+                function (total, grade) {
+                    return total + grade;
+                },
+                0
+            );
+
+
+        const average =
+            sum / subjectGrades.length;
+
+
+        const name =
+            subject.querySelector("h3").textContent;
+
+
+        // Bestes Fach
+        if (
+            best === null ||
+            average < best.average
+        ) {
+
+            best = {
+                name: name,
+                average: average
+            };
+        }
+
+
+        // Schlechtestes Fach
+        if (
+            worst === null ||
+            average > worst.average
+        ) {
+
+            worst = {
+                name: name,
+                average: average
+            };
+        }
+
+    });
+
+
+    // Anzahl der Noten anzeigen
+    gradeCount.textContent =
+        totalGrades;
+
+
+    // Bestes Fach anzeigen
+    if (best !== null) {
+
+        bestSubject.textContent =
+            best.name +
+            " (" +
+            best.average.toFixed(2) +
+            ")";
+
+    } else {
+
+        bestSubject.textContent =
+            "—";
+    }
+
+
+    // Fach mit der meisten Aufmerksamkeit
+    if (worst !== null) {
+
+        worstSubject.textContent =
+            worst.name +
+            " (" +
+            worst.average.toFixed(2) +
+            ")";
+
+    } else {
+
+        worstSubject.textContent =
+            "—";
+    }
+}
     // ==========================================
     // 🧠 NOTENFELD VERBINDEN
     // ==========================================
