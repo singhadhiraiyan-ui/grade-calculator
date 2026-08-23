@@ -5,7 +5,78 @@
 * {
     box-sizing: border-box;
 }
+/* ==========================================
+   🏎️ DASHBOARD HEADER
+   ========================================== */
 
+.dashboard-header {
+    width: min(850px, 100%);
+    margin: 0 auto 30px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 20px;
+
+    box-shadow: 0 8px 25px rgba(30, 50, 80, 0.08);
+}
+
+
+/* ==========================================
+   🏷️ BRAND
+   ========================================== */
+
+.brand h1 {
+    margin: 0;
+    font-size: 42px;
+    color: #2563eb;
+    font-weight: 800;
+}
+
+.brand p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 16px;
+}
+
+
+/* ==========================================
+   📊 DASHBOARD AVERAGE CARD
+   ========================================== */
+
+.overall-card {
+    min-width: 190px;
+    padding: 18px 22px;
+
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 15px;
+
+    text-align: center;
+}
+
+
+.overall-card span {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.overall-card strong {
+    display: block;
+
+    color: #1d4ed8;
+    font-size: 32px;
+    font-weight: 800;
+}
 body {
     margin: 0;
     padding: 40px 20px;
