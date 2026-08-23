@@ -268,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateOverallAverage();
 
 
-                // 💾 Speichern
                 saveData();
             }
         );
@@ -297,6 +296,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <button class="addGradeButton">
                 ➕ Weitere Note
+            </button>
+
+            <button class="deleteSubjectButton">
+                🗑️ Fach löschen
             </button>
 
             <p class="subjectAverage">
@@ -365,6 +368,44 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateSubjectAverage(
                     subject
                 );
+
+
+                updateOverallAverage();
+
+
+                saveData();
+            }
+        );
+
+
+        // ==========================================
+        // 🗑️ FACH LÖSCHEN
+        // ==========================================
+
+        const deleteSubjectButton =
+            subject.querySelector(
+                ".deleteSubjectButton"
+            );
+
+
+        deleteSubjectButton.addEventListener(
+            "click",
+            function () {
+
+                const confirmed =
+                    confirm(
+                        "Möchtest du das Fach \"" +
+                        subjectName +
+                        "\" wirklich löschen?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                subject.remove();
 
 
                 updateOverallAverage();
