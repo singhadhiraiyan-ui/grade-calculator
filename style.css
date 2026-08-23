@@ -307,3 +307,17 @@ button:active {
     background: #ffe4e6;
     color: #b91c1c;
 }
+/* ==========================================
+   ✏️ EDIT SUBJECT BUTTON
+   ========================================== */
+
+.editSubjectButton {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.editSubjectButton:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
