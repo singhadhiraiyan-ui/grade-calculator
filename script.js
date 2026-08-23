@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // ==========================================
-    // 📚 FÄCHER
+    // 📚 ELEMENTE
     // ==========================================
 
     const subjectsContainer =
@@ -15,6 +15,86 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const dashboardAverage =
         document.getElementById("dashboardAverage");
+
+
+    // ==========================================
+    // 💾 DATEN SPEICHERN
+    // ==========================================
+
+    function saveData() {
+
+        const subjects =
+            document.querySelectorAll(".subject");
+
+        const data = [];
+
+
+        subjects.forEach(function (subject) {
+
+            const name =
+                subject.querySelector("h3").textContent;
+
+            const gradeInputs =
+                subject.querySelectorAll(".grade");
+
+            const grades = [];
+
+
+            gradeInputs.forEach(function (input) {
+
+                if (input.value !== "") {
+                    grades.push(Number(input.value));
+                }
+
+            });
+
+
+            data.push({
+                name: name,
+                grades: grades
+            });
+
+        });
+
+
+        localStorage.setItem(
+            "gradePilotData",
+            JSON.stringify(data)
+        );
+    }
+
+
+    // ==========================================
+    // 📂 DATEN LADEN
+    // ==========================================
+
+    function loadData() {
+
+        const savedData =
+            localStorage.getItem("gradePilotData");
+
+
+        if (!savedData) {
+            return;
+        }
+
+
+        const data =
+            JSON.parse(savedData);
+
+
+        data.forEach(function (subjectData) {
+
+            createSubject(
+                subjectData.name,
+                subjectData.grades
+            );
+
+        });
+
+
+        updateOverallAverage();
+    }
 
 
     // ==========================================
@@ -33,12 +113,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (input.value !== "") {
 
-                const grade = Number(input.value);
+                const grade =
+                    Number(input.value);
 
-                if (grade >= 1 && grade <= 6) {
+
+                if (
+                    grade >= 1 &&
+                    grade <= 6
+                ) {
                     grades.push(grade);
                 }
+
             }
+
         });
 
 
@@ -90,16 +177,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (input.value !== "") {
 
-                const grade = Number(input.value);
+                const grade =
+                    Number(input.value);
 
-                if (grade >= 1 && grade <= 6) {
+
+                if (
+                    grade >= 1 &&
+                    grade <= 6
+                ) {
                     allGrades.push(grade);
                 }
+
             }
+
         });
 
 
-        // Keine Noten vorhanden
         if (allGrades.length === 0) {
 
             overallAverage.textContent =
@@ -112,7 +205,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Alle Noten zusammenrechnen
         const total =
             allGrades.reduce(
                 function (sum, grade) {
@@ -122,18 +214,15 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-        // Durchschnitt berechnen
         const average =
             total / allGrades.length;
 
 
-        // Normalen Gesamtdurchschnitt aktualisieren
         overallAverage.textContent =
             "Gesamtdurchschnitt: " +
             average.toFixed(2);
 
 
-        // Dashboard-Durchschnitt aktualisieren
         dashboardAverage.textContent =
             average.toFixed(2);
     }
@@ -143,7 +232,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // 🧠 NOTENFELD VERBINDEN
     // ==========================================
 
-    function connectGradeInput(input, subject) {
+    function connectGradeInput(
+        input,
+        subject
+    ) {
 
         input.addEventListener(
             "input",
@@ -153,7 +245,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     Number(input.value);
 
 
-                // Note überprüfen
                 if (
                     input.value !== "" &&
                     (grade < 1 || grade > 6)
@@ -169,13 +260,160 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Fach-Durchschnitt aktualisieren
-                updateSubjectAverage(subject);
+                updateSubjectAverage(
+                    subject
+                );
 
 
-                // Gesamtdurchschnitt aktualisieren
                 updateOverallAverage();
+
+
+                // 💾 Speichern
+                saveData();
             }
+        );
+    }
+
+
+    // ==========================================
+    // 🏗️ FACH ERSTELLEN
+    // ==========================================
+
+    function createSubject(
+        subjectName,
+        savedGrades = []
+    ) {
+
+        const subject =
+            document.createElement("div");
+
+        subject.className = "subject";
+
+
+        subject.innerHTML = `
+            <h3>${subjectName}</h3>
+
+            <div class="grades"></div>
+
+            <button class="addGradeButton">
+                ➕ Weitere Note
+            </button>
+
+            <p class="subjectAverage">
+                Durchschnitt: —
+            </p>
+        `;
+
+
+        subjectsContainer.appendChild(
+            subject
+        );
+
+
+        const gradesContainer =
+            subject.querySelector(".grades");
+
+
+        // ==========================================
+        // 📝 NOTEN ERSTELLEN
+        // ==========================================
+
+        if (savedGrades.length === 0) {
+
+            addGradeInput(
+                subject,
+                gradesContainer
+            );
+
+        } else {
+
+            savedGrades.forEach(
+                function (grade) {
+
+                    addGradeInput(
+                        subject,
+                        gradesContainer,
+                        grade
+                    );
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // ➕ WEITERE NOTE
+        // ==========================================
+
+        const addGradeButton =
+            subject.querySelector(
+                ".addGradeButton"
+            );
+
+
+        addGradeButton.addEventListener(
+            "click",
+            function () {
+
+                addGradeInput(
+                    subject,
+                    gradesContainer
+                );
+
+
+                updateSubjectAverage(
+                    subject
+                );
+
+
+                updateOverallAverage();
+
+
+                saveData();
+            }
+        );
+
+
+        updateSubjectAverage(
+            subject
+        );
+
+
+        return subject;
+    }
+
+
+    // ==========================================
+    // ➕ NOTENFELD ERSTELLEN
+    // ==========================================
+
+    function addGradeInput(
+        subject,
+        gradesContainer,
+        value = ""
+    ) {
+
+        const newGrade =
+            document.createElement("input");
+
+
+        newGrade.type = "number";
+        newGrade.className = "grade";
+        newGrade.min = "1";
+        newGrade.max = "6";
+        newGrade.step = "0.1";
+        newGrade.value = value;
+
+
+        gradesContainer.appendChild(
+            newGrade
+        );
+
+
+        connectGradeInput(
+            newGrade,
+            subject
         );
     }
 
@@ -189,10 +427,11 @@ document.addEventListener("DOMContentLoaded", function () {
         function () {
 
             const subjectName =
-                prompt("Wie heißt das Fach?");
+                prompt(
+                    "Wie heißt das Fach?"
+                );
 
 
-            // Abbrechen oder leer lassen
             if (
                 subjectName === null ||
                 subjectName.trim() === ""
@@ -201,108 +440,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            // Neues Fach erstellen
-            const subject =
-                document.createElement("div");
-
-            subject.className = "subject";
-
-
-            subject.innerHTML = `
-                <h3>${subjectName}</h3>
-
-                <div class="grades">
-
-                    <input
-                        type="number"
-                        class="grade"
-                        min="1"
-                        max="6"
-                        step="0.1"
-                    >
-
-                </div>
-
-                <button class="addGradeButton">
-                    ➕ Weitere Note
-                </button>
-
-                <p class="subjectAverage">
-                    Durchschnitt: —
-                </p>
-            `;
-
-
-            subjectsContainer.appendChild(subject);
-
-
-            // ==========================================
-            // 📝 ERSTE NOTE VERBINDEN
-            // ==========================================
-
-            const firstGrade =
-                subject.querySelector(".grade");
-
-
-            connectGradeInput(
-                firstGrade,
-                subject
+            createSubject(
+                subjectName.trim()
             );
 
-
-            // ==========================================
-            // ➕ WEITERE NOTE
-            // ==========================================
-
-            const addGradeButton =
-                subject.querySelector(".addGradeButton");
-
-
-            addGradeButton.addEventListener(
-                "click",
-                function () {
-
-                    const gradesContainer =
-                        subject.querySelector(".grades");
-
-
-                    const newGrade =
-                        document.createElement("input");
-
-
-                    newGrade.type = "number";
-                    newGrade.className = "grade";
-                    newGrade.min = "1";
-                    newGrade.max = "6";
-                    newGrade.step = "0.1";
-
-
-                    gradesContainer.appendChild(
-                        newGrade
-                    );
-
-
-                    // Neues Notenfeld verbinden
-                    connectGradeInput(
-                        newGrade,
-                        subject
-                    );
-
-
-                    updateSubjectAverage(
-                        subject
-                    );
-
-
-                    updateOverallAverage();
-                }
-            );
-
-
-            // Durchschnitt aktualisieren
-            updateSubjectAverage(subject);
 
             updateOverallAverage();
+
+
+            saveData();
         }
     );
 
@@ -316,11 +462,15 @@ document.addEventListener("DOMContentLoaded", function () {
         function (event) {
 
             if (
-                event.target.classList.contains("grade")
+                event.target.classList.contains(
+                    "grade"
+                )
             ) {
 
                 updateOverallAverage();
+                saveData();
             }
+
         }
     );
 
@@ -370,7 +520,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                // Eingaben überprüfen
                 if (
                     currentAverage === 0 ||
                     numberOfGrades === 0 ||
@@ -384,7 +533,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Notenbereich überprüfen
                 if (
                     currentAverage < 1 ||
                     currentAverage > 6 ||
@@ -399,7 +547,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Ziel bereits erreicht
                 if (
                     currentAverage <= targetAverage
                 ) {
@@ -411,7 +558,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Benötigte Note berechnen
                 const neededGrade =
                     targetAverage *
                     (numberOfGrades + 1)
@@ -420,7 +566,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     numberOfGrades;
 
 
-                // Note besser als 1
                 if (neededGrade < 1) {
 
                     neededGradeResult.textContent =
@@ -430,7 +575,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Note schlechter als 6
                 if (neededGrade > 6) {
 
                     neededGradeResult.textContent =
@@ -440,7 +584,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                // Ergebnis anzeigen
                 neededGradeResult.textContent =
                     "🎯 Du brauchst ungefähr eine " +
                     neededGrade.toFixed(2) +
@@ -453,6 +596,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================
     // 🚀 START
     // ==========================================
+
+    loadData();
 
     updateOverallAverage();
 
