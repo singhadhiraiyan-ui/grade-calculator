@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const data = [];
 
-
         subjects.forEach(function (subject) {
 
             const name =
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const grades = [];
 
-
             gradeInputs.forEach(function (input) {
 
                 if (input.value !== "") {
@@ -48,14 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
 
-
             data.push({
                 name: name,
                 grades: grades
             });
 
         });
-
 
         localStorage.setItem(
             "gradePilotData",
@@ -73,15 +69,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const savedData =
             localStorage.getItem("gradePilotData");
 
-
         if (!savedData) {
             return;
         }
 
-
         const data =
             JSON.parse(savedData);
-
 
         data.forEach(function (subjectData) {
 
@@ -91,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
         });
-
 
         updateOverallAverage();
     }
@@ -108,14 +100,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let grades = [];
 
-
         gradeInputs.forEach(function (input) {
 
             if (input.value !== "") {
 
                 const grade =
                     Number(input.value);
-
 
                 if (
                     grade >= 1 &&
@@ -128,10 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-
         const averageElement =
             subject.querySelector(".subjectAverage");
-
 
         if (grades.length === 0) {
 
@@ -141,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         const sum =
             grades.reduce(
                 function (total, grade) {
@@ -150,10 +137,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 0
             );
 
-
         const average =
             sum / grades.length;
-
 
         averageElement.textContent =
             "Durchschnitt: " +
@@ -172,14 +157,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let allGrades = [];
 
-
         allGradeInputs.forEach(function (input) {
 
             if (input.value !== "") {
 
                 const grade =
                     Number(input.value);
-
 
                 if (
                     grade >= 1 &&
@@ -192,7 +175,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-
         if (allGrades.length === 0) {
 
             overallAverage.textContent =
@@ -204,7 +186,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         const total =
             allGrades.reduce(
                 function (sum, grade) {
@@ -213,15 +194,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 0
             );
 
-
         const average =
             total / allGrades.length;
-
 
         overallAverage.textContent =
             "Gesamtdurchschnitt: " +
             average.toFixed(2);
-
 
         dashboardAverage.textContent =
             average.toFixed(2);
@@ -244,7 +222,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const grade =
                     Number(input.value);
 
-
                 if (
                     input.value !== "" &&
                     (grade < 1 || grade > 6)
@@ -259,14 +236,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     input.setCustomValidity("");
                 }
 
-
                 updateSubjectAverage(
                     subject
                 );
 
-
                 updateOverallAverage();
-
 
                 saveData();
             }
@@ -288,7 +262,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         subject.className = "subject";
 
-
         subject.innerHTML = `
             <h3>${subjectName}</h3>
 
@@ -296,6 +269,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <button class="addGradeButton">
                 ➕ Weitere Note
+            </button>
+
+            <button class="editSubjectButton">
+                ✏️ Fach bearbeiten
             </button>
 
             <button class="deleteSubjectButton">
@@ -307,11 +284,9 @@ document.addEventListener("DOMContentLoaded", function () {
             </p>
         `;
 
-
         subjectsContainer.appendChild(
             subject
         );
-
 
         const gradesContainer =
             subject.querySelector(".grades");
@@ -354,7 +329,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ".addGradeButton"
             );
 
-
         addGradeButton.addEventListener(
             "click",
             function () {
@@ -364,13 +338,54 @@ document.addEventListener("DOMContentLoaded", function () {
                     gradesContainer
                 );
 
-
                 updateSubjectAverage(
                     subject
                 );
 
-
                 updateOverallAverage();
+
+                saveData();
+            }
+        );
+
+
+        // ==========================================
+        // ✏️ FACH BEARBEITEN
+        // ==========================================
+
+        const editSubjectButton =
+            subject.querySelector(
+                ".editSubjectButton"
+            );
+
+        editSubjectButton.addEventListener(
+            "click",
+            function () {
+
+                const currentName =
+                    subject.querySelector(
+                        "h3"
+                    ).textContent;
+
+                const newName =
+                    prompt(
+                        "Wie soll das Fach heißen?",
+                        currentName
+                    );
+
+
+                if (
+                    newName === null ||
+                    newName.trim() === ""
+                ) {
+                    return;
+                }
+
+
+                subject.querySelector(
+                    "h3"
+                ).textContent =
+                    newName.trim();
 
 
                 saveData();
@@ -387,7 +402,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ".deleteSubjectButton"
             );
 
-
         deleteSubjectButton.addEventListener(
             "click",
             function () {
@@ -395,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const confirmed =
                     confirm(
                         "Möchtest du das Fach \"" +
-                        subjectName +
+                        subject.querySelector("h3").textContent +
                         "\" wirklich löschen?"
                     );
 
@@ -407,9 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 subject.remove();
 
-
                 updateOverallAverage();
-
 
                 saveData();
             }
@@ -419,7 +431,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSubjectAverage(
             subject
         );
-
 
         return subject;
     }
@@ -438,7 +449,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const newGrade =
             document.createElement("input");
 
-
         newGrade.type = "number";
         newGrade.className = "grade";
         newGrade.min = "1";
@@ -446,11 +456,9 @@ document.addEventListener("DOMContentLoaded", function () {
         newGrade.step = "0.1";
         newGrade.value = value;
 
-
         gradesContainer.appendChild(
             newGrade
         );
-
 
         connectGradeInput(
             newGrade,
@@ -472,7 +480,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Wie heißt das Fach?"
                 );
 
-
             if (
                 subjectName === null ||
                 subjectName.trim() === ""
@@ -480,14 +487,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-
             createSubject(
                 subjectName.trim()
             );
 
-
             updateOverallAverage();
-
 
             saveData();
         }
@@ -544,14 +548,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         ).value
                     );
 
-
                 const numberOfGrades =
                     Number(
                         document.getElementById(
                             "numberOfGrades"
                         ).value
                     );
-
 
                 const targetAverage =
                     Number(
