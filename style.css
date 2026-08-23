@@ -293,3 +293,17 @@ button:active {
         margin-top: 8px;
     }
 }
+/* ==========================================
+   🗑️ DELETE SUBJECT BUTTON
+   ========================================== */
+
+.deleteSubjectButton {
+    background: #fff1f2;
+    color: #dc2626;
+    border: 1px solid #fecdd3;
+}
+
+.deleteSubjectButton:hover {
+    background: #ffe4e6;
+    color: #b91c1c;
+}
