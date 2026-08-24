@@ -654,14 +654,14 @@ function updateStatistics() {
         function (event) {
 
             if (
-                event.target.classList.contains(
-                    "grade"
-                )
-            ) {
-
-                updateOverallAverage();
-                saveData();
-            }
+    event.target.classList.contains(
+        "grade"
+    )
+) {
+    updateOverallAverage();
+    updateStatistics();
+    saveData();
+}
 
         }
     );
