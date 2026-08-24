@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             dashboardAverage.textContent =
                 "—";
-
+updateStatistics()
             return;
         }
 
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dashboardAverage.textContent =
             average.toFixed(2);
     }
-
+updateStatistics()
 // ==========================================
 // 📊 DASHBOARD STATISTIKEN
 // ==========================================
