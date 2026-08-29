@@ -782,7 +782,248 @@ function updateStatistics() {
         );
     }
 
+// ==========================================
+// 📅 PRÜFUNGSPLANER
+// ==========================================
 
+const examSubject =
+    document.getElementById("examSubject");
+
+const examName =
+    document.getElementById("examName");
+
+const examDate =
+    document.getElementById("examDate");
+
+const addExamButton =
+    document.getElementById("addExamButton");
+
+const examList =
+    document.getElementById("examList");
+
+const noExams =
+    document.getElementById("noExams");
+
+
+// ==========================================
+// 📚 FÄCHER IN DROPDOWN LADEN
+// ==========================================
+
+function updateExamSubjects() {
+
+    const subjects =
+        document.querySelectorAll(".subject");
+
+
+    examSubject.innerHTML =
+        '<option value="">Fach auswählen</option>';
+
+
+    subjects.forEach(function (subject) {
+
+        const subjectName =
+            subject.querySelector("h3").textContent;
+
+
+        const option =
+            document.createElement("option");
+
+
+        option.value = subjectName;
+        option.textContent = subjectName;
+
+
+        examSubject.appendChild(option);
+
+    });
+}
+
+
+// ==========================================
+// 💾 PRÜFUNGEN SPEICHERN
+// ==========================================
+
+function saveExams(exams) {
+
+    localStorage.setItem(
+        "gradePilotExams",
+        JSON.stringify(exams)
+    );
+}
+
+
+// ==========================================
+// 📂 PRÜFUNGEN LADEN
+// ==========================================
+
+function loadExams() {
+
+    const savedExams =
+        localStorage.getItem("gradePilotExams");
+
+
+    if (!savedExams) {
+        return [];
+    }
+
+
+    return JSON.parse(savedExams);
+}
+
+
+// ==========================================
+// 📋 PRÜFUNGEN ANZEIGEN
+// ==========================================
+
+function displayExams() {
+
+    const exams =
+        loadExams();
+
+
+    examList.innerHTML = "";
+
+
+    if (exams.length === 0) {
+
+        examList.innerHTML =
+            '<p id="noExams">Noch keine Prüfungen geplant.</p>';
+
+        return;
+    }
+
+
+    exams.forEach(function (exam, index) {
+
+        const examCard =
+            document.createElement("div");
+
+
+        examCard.className =
+            "examCard";
+
+
+        examCard.innerHTML = `
+            <h4>${exam.name}</h4>
+
+            <p>📚 ${exam.subject}</p>
+
+            <p>📅 ${exam.date}</p>
+
+            <button class="deleteExamButton">
+                🗑️ Prüfung löschen
+            </button>
+        `;
+
+
+        const deleteButton =
+            examCard.querySelector(
+                ".deleteExamButton"
+            );
+
+
+        deleteButton.addEventListener(
+            "click",
+            function () {
+
+                const confirmed =
+                    confirm(
+                        "Möchtest du diese Prüfung wirklich löschen?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                exams.splice(index, 1);
+
+                saveExams(exams);
+
+                displayExams();
+            }
+        );
+
+
+        examList.appendChild(
+            examCard
+        );
+
+    });
+}
+
+
+// ==========================================
+// ➕ PRÜFUNG HINZUFÜGEN
+// ==========================================
+
+addExamButton.addEventListener(
+    "click",
+    function () {
+
+        const subject =
+            examSubject.value.trim();
+
+        const name =
+            examName.value.trim();
+
+        const date =
+            examDate.value;
+
+
+        // Eingaben überprüfen
+        if (
+            subject === "" ||
+            name === "" ||
+            date === ""
+        ) {
+
+            alert(
+                "Bitte fülle alle Felder aus."
+            );
+
+            return;
+        }
+
+
+        const exams =
+            loadExams();
+
+
+        exams.push({
+
+            subject: subject,
+
+            name: name,
+
+            date: date
+
+        });
+
+
+        saveExams(exams);
+
+
+        // Eingabefelder zurücksetzen
+        examSubject.value = "";
+        examName.value = "";
+        examDate.value = "";
+
+
+        displayExams();
+
+    }
+);
+
+
+// ==========================================
+// 🚀 PRÜFUNGSPLANER STARTEN
+// ==========================================
+
+updateExamSubjects();
+
+displayExams();
     // ==========================================
     // 🚀 START
     // ==========================================
