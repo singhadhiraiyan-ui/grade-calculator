@@ -1021,15 +1021,10 @@ addExamButton.addEventListener(
 // 🚀 PRÜFUNGSPLANER STARTEN
 // ==========================================
 
+loadData();
+
 updateExamSubjects();
 
 displayExams();
-    // ==========================================
-    // 🚀 START
-    // ==========================================
 
-    loadData();
-
-    updateOverallAverage();
-
-});
+updateOverallAverage();
