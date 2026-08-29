@@ -41,16 +41,20 @@ document.addEventListener("DOMContentLoaded", function () {
             gradeInputs.forEach(function (input) {
 
                 if (input.value !== "") {
-                    grades.push(Number(input.value));
-                }
 
+                    const grade =
+                        Number(input.value);
+
+                    if (grade >= 1 && grade <= 6) {
+                        grades.push(grade);
+                    }
+                }
             });
 
             data.push({
                 name: name,
                 grades: grades
             });
-
         });
 
         localStorage.setItem(
@@ -82,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 subjectData.name,
                 subjectData.grades
             );
-
         });
 
         updateOverallAverage();
@@ -98,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const gradeInputs =
             subject.querySelectorAll(".grade");
 
-        let grades = [];
+        const grades = [];
 
         gradeInputs.forEach(function (input) {
 
@@ -107,15 +110,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 const grade =
                     Number(input.value);
 
-                if (
-                    grade >= 1 &&
-                    grade <= 6
-                ) {
+                if (grade >= 1 && grade <= 6) {
                     grades.push(grade);
                 }
-
             }
-
         });
 
         const averageElement =
@@ -129,16 +127,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const sum =
-            grades.reduce(
-                function (total, grade) {
-                    return total + grade;
-                },
-                0
-            );
+        const total =
+            grades.reduce(function (sum, grade) {
+                return sum + grade;
+            }, 0);
 
         const average =
-            sum / grades.length;
+            total / grades.length;
 
         averageElement.textContent =
             "Durchschnitt: " +
@@ -155,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const allGradeInputs =
             document.querySelectorAll(".grade");
 
-        let allGrades = [];
+        const allGrades = [];
 
         allGradeInputs.forEach(function (input) {
 
@@ -164,203 +159,53 @@ document.addEventListener("DOMContentLoaded", function () {
                 const grade =
                     Number(input.value);
 
-                if (
-                    grade >= 1 &&
-                    grade <= 6
-                ) {
+                if (grade >= 1 && grade <= 6) {
                     allGrades.push(grade);
                 }
-
             }
-
         });
 
         if (allGrades.length === 0) {
 
-            overallAverage.textContent =
-                "Gesamtdurchschnitt: —";
+            if (overallAverage) {
+                overallAverage.textContent =
+                    "Gesamtdurchschnitt: —";
+            }
 
-            dashboardAverage.textContent =
-                "—";
-            updateStatistics()
+            if (dashboardAverage) {
+                dashboardAverage.textContent = "—";
+            }
+
             return;
         }
 
         const total =
-            allGrades.reduce(
-                function (sum, grade) {
-                    return sum + grade;
-                },
-                0
-            );
+            allGrades.reduce(function (sum, grade) {
+                return sum + grade;
+            }, 0);
 
         const average =
             total / allGrades.length;
 
-        overallAverage.textContent =
-            "Gesamtdurchschnitt: " +
-            average.toFixed(2);
+        if (overallAverage) {
 
-        dashboardAverage.textContent =
-            average.toFixed(2);
-    }
-updateStatistics()
-// ==========================================
-// 📊 DASHBOARD STATISTIKEN
-// ==========================================
-
-function updateStatistics() {
-
-    const subjects =
-        document.querySelectorAll(".subject");
-
-    const subjectCount =
-        document.getElementById("subjectCount");
-
-    const gradeCount =
-        document.getElementById("gradeCount");
-
-    const bestSubject =
-        document.getElementById("bestSubject");
-
-    const worstSubject =
-        document.getElementById("worstSubject");
-
-
-    // Anzahl der Fächer
-    subjectCount.textContent =
-        subjects.length;
-
-
-    // Alle Fächer untersuchen
-    let totalGrades = 0;
-    let best = null;
-    let worst = null;
-
-
-    subjects.forEach(function (subject) {
-
-        const grades =
-            subject.querySelectorAll(".grade");
-
-        let subjectGrades = [];
-
-
-        grades.forEach(function (input) {
-
-            if (input.value !== "") {
-
-                const grade =
-                    Number(input.value);
-
-                if (
-                    grade >= 1 &&
-                    grade <= 6
-                ) {
-
-                    subjectGrades.push(grade);
-                    totalGrades++;
-                }
-            }
-        });
-
-
-        // Fach ohne Noten überspringen
-        if (subjectGrades.length === 0) {
-            return;
+            overallAverage.textContent =
+                "Gesamtdurchschnitt: " +
+                average.toFixed(2);
         }
 
-
-        // Durchschnitt des Faches
-        const sum =
-            subjectGrades.reduce(
-                function (total, grade) {
-                    return total + grade;
-                },
-                0
-            );
-
-
-        const average =
-            sum / subjectGrades.length;
-
-
-        const name =
-            subject.querySelector("h3").textContent;
-
-
-        // Bestes Fach
-        if (
-            best === null ||
-            average < best.average
-        ) {
-
-            best = {
-                name: name,
-                average: average
-            };
+        if (dashboardAverage) {
+            dashboardAverage.textContent =
+                average.toFixed(2);
         }
-
-
-        // Schlechtestes Fach
-        if (
-            worst === null ||
-            average > worst.average
-        ) {
-
-            worst = {
-                name: name,
-                average: average
-            };
-        }
-
-    });
-
-
-    // Anzahl der Noten anzeigen
-    gradeCount.textContent =
-        totalGrades;
-
-
-    // Bestes Fach anzeigen
-    if (best !== null) {
-
-        bestSubject.textContent =
-            best.name +
-            " (" +
-            best.average.toFixed(2) +
-            ")";
-
-    } else {
-
-        bestSubject.textContent =
-            "—";
     }
 
 
-    // Fach mit der meisten Aufmerksamkeit
-    if (worst !== null) {
-
-        worstSubject.textContent =
-            worst.name +
-            " (" +
-            worst.average.toFixed(2) +
-            ")";
-
-    } else {
-
-        worstSubject.textContent =
-            "—";
-    }
-}
     // ==========================================
     // 🧠 NOTENFELD VERBINDEN
     // ==========================================
 
-    function connectGradeInput(
-        input,
-        subject
-    ) {
+    function connectGradeInput(input, subject) {
 
         input.addEventListener(
             "input",
@@ -383,14 +228,40 @@ function updateStatistics() {
                     input.setCustomValidity("");
                 }
 
-                updateSubjectAverage(
-                    subject
-                );
-
+                updateSubjectAverage(subject);
                 updateOverallAverage();
-
+                updateStatistics();
                 saveData();
             }
+        );
+    }
+
+
+    // ==========================================
+    // ➕ NOTENFELD ERSTELLEN
+    // ==========================================
+
+    function addGradeInput(
+        subject,
+        gradesContainer,
+        value = ""
+    ) {
+
+        const newGrade =
+            document.createElement("input");
+
+        newGrade.type = "number";
+        newGrade.className = "grade";
+        newGrade.min = "1";
+        newGrade.max = "6";
+        newGrade.step = "0.1";
+        newGrade.value = value;
+
+        gradesContainer.appendChild(newGrade);
+
+        connectGradeInput(
+            newGrade,
+            subject
         );
     }
 
@@ -431,17 +302,14 @@ function updateStatistics() {
             </p>
         `;
 
-        subjectsContainer.appendChild(
-            subject
-        );
+        subjectsContainer.appendChild(subject);
+
 
         const gradesContainer =
             subject.querySelector(".grades");
 
 
-        // ==========================================
-        // 📝 NOTEN ERSTELLEN
-        // ==========================================
+        // Noten laden
 
         if (savedGrades.length === 0) {
 
@@ -452,18 +320,14 @@ function updateStatistics() {
 
         } else {
 
-            savedGrades.forEach(
-                function (grade) {
+            savedGrades.forEach(function (grade) {
 
-                    addGradeInput(
-                        subject,
-                        gradesContainer,
-                        grade
-                    );
-
-                }
-            );
-
+                addGradeInput(
+                    subject,
+                    gradesContainer,
+                    grade
+                );
+            });
         }
 
 
@@ -472,9 +336,7 @@ function updateStatistics() {
         // ==========================================
 
         const addGradeButton =
-            subject.querySelector(
-                ".addGradeButton"
-            );
+            subject.querySelector(".addGradeButton");
 
         addGradeButton.addEventListener(
             "click",
@@ -485,12 +347,9 @@ function updateStatistics() {
                     gradesContainer
                 );
 
-                updateSubjectAverage(
-                    subject
-                );
-
+                updateSubjectAverage(subject);
                 updateOverallAverage();
-
+                updateStatistics();
                 saveData();
             }
         );
@@ -510,16 +369,13 @@ function updateStatistics() {
             function () {
 
                 const currentName =
-                    subject.querySelector(
-                        "h3"
-                    ).textContent;
+                    subject.querySelector("h3").textContent;
 
                 const newName =
                     prompt(
                         "Wie soll das Fach heißen?",
                         currentName
                     );
-
 
                 if (
                     newName === null ||
@@ -528,14 +384,12 @@ function updateStatistics() {
                     return;
                 }
 
-
-                subject.querySelector(
-                    "h3"
-                ).textContent =
+                subject.querySelector("h3").textContent =
                     newName.trim();
 
-
                 saveData();
+                updateExamSubjects();
+                updateStatistics();
             }
         );
 
@@ -560,57 +414,23 @@ function updateStatistics() {
                         "\" wirklich löschen?"
                     );
 
-
                 if (!confirmed) {
                     return;
                 }
 
-
                 subject.remove();
 
                 updateOverallAverage();
-
+                updateExamSubjects();
+                updateStatistics();
                 saveData();
             }
         );
 
 
-        updateSubjectAverage(
-            subject
-        );
+        updateSubjectAverage(subject);
 
         return subject;
-    }
-
-
-    // ==========================================
-    // ➕ NOTENFELD ERSTELLEN
-    // ==========================================
-
-    function addGradeInput(
-        subject,
-        gradesContainer,
-        value = ""
-    ) {
-
-        const newGrade =
-            document.createElement("input");
-
-        newGrade.type = "number";
-        newGrade.className = "grade";
-        newGrade.min = "1";
-        newGrade.max = "6";
-        newGrade.step = "0.1";
-        newGrade.value = value;
-
-        gradesContainer.appendChild(
-            newGrade
-        );
-
-        connectGradeInput(
-            newGrade,
-            subject
-        );
     }
 
 
@@ -618,53 +438,184 @@ function updateStatistics() {
     // ➕ FACH HINZUFÜGEN
     // ==========================================
 
-    addSubjectButton.addEventListener(
-        "click",
-        function () {
+    if (addSubjectButton) {
 
-            const subjectName =
-                prompt(
-                    "Wie heißt das Fach?"
+        addSubjectButton.addEventListener(
+            "click",
+            function () {
+
+                const subjectName =
+                    prompt("Wie heißt das Fach?");
+
+                if (
+                    subjectName === null ||
+                    subjectName.trim() === ""
+                ) {
+                    return;
+                }
+
+                createSubject(
+                    subjectName.trim()
                 );
 
-            if (
-                subjectName === null ||
-                subjectName.trim() === ""
-            ) {
+                updateOverallAverage();
+                updateExamSubjects();
+                updateStatistics();
+                saveData();
+            }
+        );
+    }
+
+
+    // ==========================================
+    // 📈 DASHBOARD STATISTIKEN
+    // ==========================================
+
+    function updateStatistics() {
+
+        const subjects =
+            document.querySelectorAll(".subject");
+
+
+        const subjectCount =
+            document.getElementById("subjectCount");
+
+        const gradeCount =
+            document.getElementById("gradeCount");
+
+        const bestSubject =
+            document.getElementById("bestSubject");
+
+        const worstSubject =
+            document.getElementById("worstSubject");
+
+
+        // Anzahl der Fächer
+
+        if (subjectCount) {
+            subjectCount.textContent =
+                subjects.length;
+        }
+
+
+        let totalGrades = 0;
+
+        let best = null;
+        let worst = null;
+
+
+        subjects.forEach(function (subject) {
+
+            const name =
+                subject.querySelector("h3").textContent;
+
+            const gradeInputs =
+                subject.querySelectorAll(".grade");
+
+            const grades = [];
+
+
+            gradeInputs.forEach(function (input) {
+
+                if (input.value !== "") {
+
+                    const grade =
+                        Number(input.value);
+
+                    if (grade >= 1 && grade <= 6) {
+
+                        grades.push(grade);
+                        totalGrades++;
+                    }
+                }
+            });
+
+
+            if (grades.length === 0) {
                 return;
             }
 
-            createSubject(
-                subjectName.trim()
-            );
 
-            updateOverallAverage();
+            const average =
+                grades.reduce(
+                    function (sum, grade) {
+                        return sum + grade;
+                    },
+                    0
+                ) / grades.length;
 
-            saveData();
-        }
-    );
 
+            const subjectData = {
+                name: name,
+                average: average
+            };
 
-    // ==========================================
-    // ⚡ AUTOMATISCHE AKTUALISIERUNG
-    // ==========================================
-
-    document.addEventListener(
-        "input",
-        function (event) {
 
             if (
-    event.target.classList.contains(
-        "grade"
-    )
-) {
-    updateOverallAverage();
-    updateStatistics();
-    saveData();
-}
+                best === null ||
+                average < best.average
+            ) {
+                best = subjectData;
+            }
 
+
+            if (
+                worst === null ||
+                average > worst.average
+            ) {
+                worst = subjectData;
+            }
+        });
+
+
+        // Anzahl Noten
+
+        if (gradeCount) {
+
+            gradeCount.textContent =
+                totalGrades;
         }
-    );
+
+
+        // Bestes Fach
+
+        if (bestSubject) {
+
+            if (best === null) {
+
+                bestSubject.textContent =
+                    "—";
+
+            } else {
+
+                bestSubject.textContent =
+                    best.name +
+                    " (" +
+                    best.average.toFixed(2) +
+                    ")";
+            }
+        }
+
+
+        // Schlechtestes Fach
+
+        if (worstSubject) {
+
+            if (worst === null) {
+
+                worstSubject.textContent =
+                    "—";
+
+            } else {
+
+                worstSubject.textContent =
+                    worst.name +
+                    " (" +
+                    worst.average.toFixed(2) +
+                    ")";
+            }
+        }
+    }
 
 
     // ==========================================
@@ -711,9 +662,9 @@ function updateStatistics() {
 
 
                 if (
-                    currentAverage === 0 ||
-                    numberOfGrades === 0 ||
-                    targetAverage === 0
+                    !currentAverage ||
+                    !numberOfGrades ||
+                    !targetAverage
                 ) {
 
                     neededGradeResult.textContent =
@@ -727,11 +678,12 @@ function updateStatistics() {
                     currentAverage < 1 ||
                     currentAverage > 6 ||
                     targetAverage < 1 ||
-                    targetAverage > 6
+                    targetAverage > 6 ||
+                    numberOfGrades < 1
                 ) {
 
                     neededGradeResult.textContent =
-                        "Noten müssen zwischen 1 und 6 liegen.";
+                        "Bitte überprüfe deine Eingaben.";
 
                     return;
                 }
@@ -782,207 +734,123 @@ function updateStatistics() {
         );
     }
 
-// ==========================================
-// 📅 PRÜFUNGSPLANER
-// ==========================================
 
-const examSubject =
-    document.getElementById("examSubject");
+    // ==========================================
+    // 📅 PRÜFUNGSPLANER
+    // ==========================================
 
-const examName =
-    document.getElementById("examName");
+    const examSubject =
+        document.getElementById("examSubject");
 
-const examDate =
-    document.getElementById("examDate");
+    const examName =
+        document.getElementById("examName");
 
-const addExamButton =
-    document.getElementById("addExamButton");
+    const examDate =
+        document.getElementById("examDate");
 
-const examList =
-    document.getElementById("examList");
+    const addExamButton =
+        document.getElementById("addExamButton");
 
-const noExams =
-    document.getElementById("noExams");
+    const examList =
+        document.getElementById("examList");
 
 
-// ==========================================
-// 📚 FÄCHER IN DROPDOWN LADEN
-// ==========================================
+    // ==========================================
+    // 📚 FÄCHER IN DROPDOWN LADEN
+    // ==========================================
 
-function updateExamSubjects() {
+    function updateExamSubjects() {
 
-    const subjects =
-        document.querySelectorAll(".subject");
+        if (!examSubject) {
+            return;
+        }
 
+        const subjects =
+            document.querySelectorAll(".subject");
 
-    examSubject.innerHTML =
-        '<option value="">Fach auswählen</option>';
 
+        examSubject.innerHTML =
+            '<option value="">Fach auswählen</option>';
 
-    subjects.forEach(function (subject) {
 
-        const subjectName =
-            subject.querySelector("h3").textContent;
+        subjects.forEach(function (subject) {
 
+            const heading =
+                subject.querySelector("h3");
 
-        const option =
-            document.createElement("option");
-
-
-        option.value = subjectName;
-        option.textContent = subjectName;
-
-
-        examSubject.appendChild(option);
-
-    });
-}
-
-
-// ==========================================
-// 💾 PRÜFUNGEN SPEICHERN
-// ==========================================
-
-function saveExams(exams) {
-
-    localStorage.setItem(
-        "gradePilotExams",
-        JSON.stringify(exams)
-    );
-}
-
-
-// ==========================================
-// 📂 PRÜFUNGEN LADEN
-// ==========================================
-
-function loadExams() {
-
-    const savedExams =
-        localStorage.getItem("gradePilotExams");
-
-
-    if (!savedExams) {
-        return [];
-    }
-
-
-    return JSON.parse(savedExams);
-}
-
-
-// ==========================================
-// 📋 PRÜFUNGEN ANZEIGEN
-// ==========================================
-
-function displayExams() {
-
-    const exams =
-        loadExams();
-
-
-    examList.innerHTML = "";
-
-
-    if (exams.length === 0) {
-
-        examList.innerHTML =
-            '<p id="noExams">Noch keine Prüfungen geplant.</p>';
-
-        return;
-    }
-
-
-    exams.forEach(function (exam, index) {
-
-        const examCard =
-            document.createElement("div");
-
-
-        examCard.className =
-            "examCard";
-
-
-        examCard.innerHTML = `
-            <h4>${exam.name}</h4>
-
-            <p>📚 ${exam.subject}</p>
-
-            <p>📅 ${exam.date}</p>
-
-            <button class="deleteExamButton">
-                🗑️ Prüfung löschen
-            </button>
-        `;
-
-
-        const deleteButton =
-            examCard.querySelector(
-                ".deleteExamButton"
-            );
-
-
-        deleteButton.addEventListener(
-            "click",
-            function () {
-
-                const confirmed =
-                    confirm(
-                        "Möchtest du diese Prüfung wirklich löschen?"
-                    );
-
-
-                if (!confirmed) {
-                    return;
-                }
-
-
-                exams.splice(index, 1);
-
-                saveExams(exams);
-
-                displayExams();
+            if (!heading) {
+                return;
             }
+
+            const subjectName =
+                heading.textContent;
+
+
+            const option =
+                document.createElement("option");
+
+            option.value = subjectName;
+            option.textContent = subjectName;
+
+
+            examSubject.appendChild(option);
+        });
+    }
+
+
+    // ==========================================
+    // 💾 PRÜFUNGEN SPEICHERN
+    // ==========================================
+
+    function saveExams(exams) {
+
+        localStorage.setItem(
+            "gradePilotExams",
+            JSON.stringify(exams)
         );
+    }
 
 
-        examList.appendChild(
-            examCard
-        );
+    // ==========================================
+    // 📂 PRÜFUNGEN LADEN
+    // ==========================================
 
-    });
-}
+    function loadExams() {
 
-
-// ==========================================
-// ➕ PRÜFUNG HINZUFÜGEN
-// ==========================================
-
-addExamButton.addEventListener(
-    "click",
-    function () {
-
-        const subject =
-            examSubject.value.trim();
-
-        const name =
-            examName.value.trim();
-
-        const date =
-            examDate.value;
-
-
-        // Eingaben überprüfen
-        if (
-            subject === "" ||
-            name === "" ||
-            date === ""
-        ) {
-
-            alert(
-                "Bitte fülle alle Felder aus."
+        const savedExams =
+            localStorage.getItem(
+                "gradePilotExams"
             );
 
+
+        if (!savedExams) {
+            return [];
+        }
+
+
+        try {
+
+            return JSON.parse(savedExams);
+
+        } catch (error) {
+
+            console.error(
+                "Fehler beim Laden der Prüfungen:",
+                error
+            );
+
+            return [];
+        }
+    }
+
+
+    // ==========================================
+    // 📋 PRÜFUNGEN ANZEIGEN
+    // ==========================================
+
+    function displayExams() {
+
+        if (!examList) {
             return;
         }
 
@@ -991,40 +859,204 @@ addExamButton.addEventListener(
             loadExams();
 
 
-        exams.push({
+        examList.innerHTML = "";
 
-            subject: subject,
 
-            name: name,
+        if (exams.length === 0) {
 
-            date: date
+            examList.innerHTML =
+                '<p id="noExams">Noch keine Prüfungen geplant.</p>';
 
+            return;
+        }
+
+
+        // Nach Datum sortieren
+
+        exams.sort(function (a, b) {
+
+            return a.date.localeCompare(b.date);
         });
 
 
-        saveExams(exams);
+        exams.forEach(function (exam, index) {
+
+            const examCard =
+                document.createElement("div");
+
+            examCard.className =
+                "examCard";
 
 
-        // Eingabefelder zurücksetzen
-        examSubject.value = "";
-        examName.value = "";
-        examDate.value = "";
+            examCard.innerHTML = `
+                <h4>${exam.name}</h4>
+
+                <p>📚 ${exam.subject}</p>
+
+                <p>📅 ${exam.date}</p>
+
+                <button class="deleteExamButton">
+                    🗑️ Prüfung löschen
+                </button>
+            `;
 
 
-        displayExams();
+            const deleteButton =
+                examCard.querySelector(
+                    ".deleteExamButton"
+                );
 
+
+            deleteButton.addEventListener(
+                "click",
+                function () {
+
+                    const confirmed =
+                        confirm(
+                            "Möchtest du diese Prüfung wirklich löschen?"
+                        );
+
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+
+                    const currentExams =
+                        loadExams();
+
+
+                    const examIndex =
+                        currentExams.findIndex(
+                            function (item) {
+
+                                return (
+                                    item.subject === exam.subject &&
+                                    item.name === exam.name &&
+                                    item.date === exam.date
+                                );
+                            }
+                        );
+
+
+                    if (examIndex !== -1) {
+
+                        currentExams.splice(
+                            examIndex,
+                            1
+                        );
+                    }
+
+
+                    saveExams(currentExams);
+
+                    displayExams();
+                }
+            );
+
+
+            examList.appendChild(examCard);
+        });
     }
-);
 
 
-// ==========================================
-// 🚀 PRÜFUNGSPLANER STARTEN
-// ==========================================
+    // ==========================================
+    // ➕ PRÜFUNG HINZUFÜGEN
+    // ==========================================
 
-loadData();
+    if (addExamButton) {
 
-updateExamSubjects();
+        addExamButton.addEventListener(
+            "click",
+            function () {
 
-displayExams();
+                const subject =
+                    examSubject.value.trim();
 
-updateOverallAverage();
+                const name =
+                    examName.value.trim();
+
+                const date =
+                    examDate.value;
+
+
+                if (
+                    subject === "" ||
+                    name === "" ||
+                    date === ""
+                ) {
+
+                    alert(
+                        "Bitte fülle alle Felder aus."
+                    );
+
+                    return;
+                }
+
+
+                const exams =
+                    loadExams();
+
+
+                exams.push({
+
+                    subject: subject,
+
+                    name: name,
+
+                    date: date
+
+                });
+
+
+                saveExams(exams);
+
+
+                examSubject.value = "";
+                examName.value = "";
+                examDate.value = "";
+
+
+                displayExams();
+            }
+        );
+    }
+
+
+    // ==========================================
+    // ⚡ AUTOMATISCHE AKTUALISIERUNG
+    // ==========================================
+
+    document.addEventListener(
+        "input",
+        function (event) {
+
+            if (
+                event.target.classList.contains(
+                    "grade"
+                )
+            ) {
+
+                updateOverallAverage();
+                updateStatistics();
+                saveData();
+            }
+        }
+    );
+
+
+    // ==========================================
+    // 🚀 GRADEPILOT STARTEN
+    // ==========================================
+
+    loadData();
+
+    updateOverallAverage();
+
+    updateStatistics();
+
+    updateExamSubjects();
+
+    displayExams();
+
+});
