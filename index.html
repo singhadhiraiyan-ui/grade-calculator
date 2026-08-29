@@ -67,7 +67,66 @@
 
 </header>
 
+<!-- ==========================================
+     📅 PRÜFUNGSPLANER
+     ========================================== -->
 
+<section class="examPlanner">
+
+    <h2>📅 Prüfungsplaner</h2>
+
+    <p>Plane deine nächsten Prüfungen:</p>
+
+    <div class="examForm">
+
+        <label for="examSubject">
+            Fach
+        </label>
+
+        <select id="examSubject">
+            <option value="">Fach auswählen</option>
+        </select>
+
+
+        <label for="examName">
+            Name der Prüfung
+        </label>
+
+        <input
+            type="text"
+            id="examName"
+            placeholder="z. B. Klassenarbeit"
+        >
+
+
+        <label for="examDate">
+            Datum
+        </label>
+
+        <input
+            type="date"
+            id="examDate"
+        >
+
+
+        <button id="addExamButton">
+            ➕ Prüfung hinzufügen
+        </button>
+
+    </div>
+
+
+    <h3>📚 Deine nächsten Prüfungen</h3>
+
+    <div id="examList">
+
+        <p id="noExams">
+            Noch keine Prüfungen geplant.
+        </p>
+
+    </div>
+
+</section>
     <!-- ========================================== -->
     <!-- 📚 FÄCHER UND NOTEN -->
     <!-- ========================================== -->
